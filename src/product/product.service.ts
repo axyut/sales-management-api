@@ -6,6 +6,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { User } from 'src/user/entity/user.entity';
 import { UserService } from '../user/user.service';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { OrderService } from '../order/order.service';
 
 @Injectable()
 export class ProductService {
@@ -25,7 +26,6 @@ export class ProductService {
     product.description = createProduct.description;
     product.price = createProduct.price;
     product.category = createProduct.category;
-    product.quantity = createProduct.quantity;
     product.availablity = createProduct.availablity;
     product.user = await this.userService.findById(userId);
 
@@ -79,7 +79,6 @@ export class ProductService {
       product.name = updateProduct.name;
       product.description = updateProduct.description;
       product.price = updateProduct.price;
-      product.quantity = updateProduct.quantity;
       product.availablity = updateProduct.availablity;
 
       const updated = await this.productRepo.update(id, product);
@@ -100,6 +99,9 @@ export class ProductService {
       where: { id: id, user: user },
     });
     if (product) {
+      // delete order first if exists
+      // await this.orderService.removeAllOP(id);
+
       await this.productRepo.delete(id);
       return;
     }
@@ -107,5 +109,10 @@ export class ProductService {
       'Product with this id does not exist',
       HttpStatus.NOT_FOUND,
     );
+  }
+
+  // find product by id
+  async findById(id: number): Promise<Product> {
+    return await this.productRepo.findOne({ where: { id: id } });
   }
 }

@@ -28,10 +28,6 @@ export class CreateProductDto {
   category: (typeof Category)[keyof typeof Category];
 
   @ApiProperty()
-  @IsNumber()
-  quantity: number;
-
-  @ApiProperty()
   @IsBoolean()
   availablity: boolean;
 }

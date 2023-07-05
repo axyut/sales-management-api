@@ -4,8 +4,10 @@ import {
   Column,
   ManyToOne,
   CreateDateColumn,
+  OneToMany,
 } from 'typeorm';
 import { User } from '../../user/entity/user.entity';
+import { Order } from 'src/order/entity/order.entity';
 
 export enum Category {
   OTHERS = 'others',
@@ -33,9 +35,6 @@ export class Product {
   category: string;
 
   @Column()
-  quantity: number;
-
-  @Column()
   availablity: boolean;
 
   @CreateDateColumn()
@@ -44,4 +43,8 @@ export class Product {
   // many products to one user relationship
   @ManyToOne((type) => User, (user) => user.products)
   user: User;
+
+  // one product to many orders relationship
+  @OneToMany((type) => Order, (order) => order.product)
+  orders: Order[];
 }
