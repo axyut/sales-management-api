@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { User } from './entity/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 @Injectable()
 export class UserService {
@@ -25,7 +26,26 @@ export class UserService {
 
   // Find User By Email
   async findByEmail(email: string): Promise<User> {
-    return this.userRepo.findOne({ where: { email: email } });
+    const user = await this.userRepo.findOne({ where: { email: email } });
+    if (user) {
+      return user;
+    }
+    throw new HttpException(
+      'User with this id does not exist',
+      HttpStatus.NOT_FOUND,
+    );
+  }
+
+  // Find User By Id
+  async findById(id: number): Promise<User> {
+    const user = await this.userRepo.findOne({ where: { id: id } });
+    if (user) {
+      return user;
+    }
+    throw new HttpException(
+      'User with this id does not exist',
+      HttpStatus.NOT_FOUND,
+    );
   }
 
   // Find all Users
@@ -39,7 +59,19 @@ export class UserService {
   }
 
   // Update a User
-  async update(id: number, updateUser: UpdateUserDto): Promise<void> {
-    await this.userRepo.update(id, updateUser);
+  async update(id: number, updateUser: UpdateUserDto): Promise<Object> {
+    const updated = await this.userRepo.update(id, {
+      firstName: updateUser.firstName,
+      lastName: updateUser.lastName,
+      email: updateUser.email,
+      password: updateUser.password,
+    });
+    if (updated) {
+      return { msg: 'User Updated' };
+    }
+    throw new HttpException(
+      'User with this id does not exist',
+      HttpStatus.NOT_FOUND,
+    );
   }
 }

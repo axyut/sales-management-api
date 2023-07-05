@@ -1,8 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Product } from '../../product/entity/product.entity';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
+  // Unique ID
+  @PrimaryGeneratedColumn({})
   id: number;
 
   @Column()
@@ -11,7 +13,7 @@ export class User {
   @Column()
   lastName: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column()
@@ -19,4 +21,12 @@ export class User {
 
   @Column({ default: 'NORMAL' })
   role: string;
+
+  // one to many with products
+  @OneToMany((type) => Product, (product) => product.user)
+  products: Product[];
+
+  // one to many with orders
+  // @OneToMany((type) => Order, (order) => order.user)
+  // orders: Order[];
 }
