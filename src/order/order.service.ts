@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { ProductService } from 'src/product/product.service';
 import { UserService } from 'src/user/user.service';
 import { CreateOrderDto } from './dto/create-order.dto';
+import { Product } from 'src/product/entity/product.entity';
 
 @Injectable()
 export class OrderService {
@@ -28,7 +29,7 @@ export class OrderService {
     newOrder.product = product;
     newOrder.name = product.name;
     newOrder.quantity = order.quantity;
-    newOrder.totalPrice = product.price * order.quantity;
+    newOrder.totalAmount = product.price * order.quantity;
     const saved = await this.orderRepo.save(newOrder);
     if (saved) {
       return saved;
@@ -98,5 +99,46 @@ export class OrderService {
       'Order with this id does not exist',
       HttpStatus.NOT_FOUND,
     );
+  }
+
+  // Total Sales
+  async calculateTotalSales(): Promise<number> {
+    const orders = await this.orderRepo.find();
+
+    let totalSales = 0;
+    orders.forEach((order) => {
+      totalSales += order.totalAmount;
+    });
+
+    return totalSales;
+  }
+
+  // Top Selling Products
+  async calculateTopSellingProducts(): Promise<Product[]> {
+    const orders = await this.orderRepo.find();
+
+    const productsMap = {};
+    orders.forEach((order) => {
+      if (productsMap[order.product.id]) {
+        productsMap[order.product.id].quantity += order.quantity;
+      } else {
+        productsMap[order.product.id] = {
+          id: order.product.id,
+          name: order.product.name,
+          quantity: order.quantity,
+        };
+      }
+    });
+
+    const products: any[] = [];
+    for (const id in productsMap) {
+      products.push(productsMap[id]);
+    }
+
+    products.sort((a, b) => {
+      return b.quantity - a.quantity;
+    });
+
+    return products.slice(0, 5);
   }
 }

@@ -5,11 +5,17 @@ import { User } from './entity/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { HttpException, HttpStatus } from '@nestjs/common';
+import * as bcrypt from 'bcryptjs';
+
+import { ConfigService } from '@nestjs/config';
+
+const saltOrRounds = 10;
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly userRepo: Repository<User>,
+    private readonly configService: ConfigService,
   ) {}
 
   // Create New User
@@ -18,7 +24,8 @@ export class UserService {
     user.email = createUser.email;
     user.firstName = createUser.firstName;
     user.lastName = createUser.lastName;
-    user.password = createUser.password;
+    // hash password with bcrypt
+    user.password = await bcrypt.hash(createUser.password, saltOrRounds);
     user.role = 'NORMAL';
 
     return this.userRepo.save(user);

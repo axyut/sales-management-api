@@ -10,7 +10,12 @@ import TokenPayload from '../dto/tokenPayload.interface';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly config: ConfigService) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (request: Request) => {
+          return request?.cookies?.Authentication;
+        },
+      ]),
+
       ignoreExpiration: false,
       secretOrKey: config.get('JWT_KEY'),
     });
@@ -21,9 +26,5 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 }
 
-// extract from cookie
-// jwtFromRequest: ExtractJwt.fromExtractors([
-//   (request: Request) => {
-//     return request?.cookies?.Authentication;
-//   },
-// ]),
+// extract from header
+//  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

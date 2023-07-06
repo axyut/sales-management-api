@@ -18,7 +18,7 @@ export class Order {
   name: string;
 
   @Column()
-  totalPrice: number;
+  totalAmount: number;
 
   @Column()
   quantity: number;

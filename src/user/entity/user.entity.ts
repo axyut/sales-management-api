@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Product } from '../../product/entity/product.entity';
-import { Order } from 'src/order/entity/order.entity';
+import { Order } from '../../order/entity/order.entity';
+import { Report } from '../../report/entity/report.entity';
 
 @Entity()
 export class User {
@@ -30,4 +31,8 @@ export class User {
   // one to many with orders
   @OneToMany((type) => Order, (order) => order.user)
   orders: Order[];
+
+  // one to many with report
+  @OneToMany((type) => Report, (report) => report.user)
+  reports: Order[];
 }

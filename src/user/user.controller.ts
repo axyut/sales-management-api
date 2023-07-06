@@ -8,13 +8,15 @@ import {
   Req,
   Param,
   Patch,
+  HttpCode,
+  Res,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiTags, ApiSecurity } from '@nestjs/swagger';
 import { Constants } from '../utils/constants';
-import JwtAuthGuard from '../auth/guard/jwt.guard';
+
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('user')
