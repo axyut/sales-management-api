@@ -11,8 +11,8 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       username: process.env.DATABASE_USERNAME,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
-      synchronize: true,
-      //logging: true,
+      synchronize: false,
+      logging: true,
       autoLoadEntities: true,
     };
   }
