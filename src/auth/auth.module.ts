@@ -27,3 +27,14 @@ import { JwtStrategy } from './strategy/jwt.strategy';
   exports: [],
 })
 export class AuthModule {}
+
+// JwtModule.registerAsync({
+//   imports: [ConfigModule],
+//   inject: [ConfigService],
+//   useFactory: (config: ConfigService) => ({
+//     secret: config.get('JWT_KEY'),
+//     signOptions: {
+//       expiresIn: config.get<string>('JWT_EXPIRE'),
+//     },
+//   }),
+// });

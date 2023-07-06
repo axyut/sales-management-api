@@ -14,9 +14,10 @@ import { ApiTags } from '@nestjs/swagger';
 import { User } from '../user/entity/user.entity';
 import { ConfigService } from '@nestjs/config';
 import { HttpCode } from '@nestjs/common/decorators/http/http-code.decorator';
-import JwtAuthGuard from './guard/jwt.guard';
+import { JwtAuthGuard } from './guard/jwt.guard';
 import { LoginDto } from './dto/login.dto';
 import TokenPayload from './dto/tokenPayload.interface';
+import { PublicRoute } from './decorators';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -27,6 +28,7 @@ export class AuthController {
   ) {}
 
   // Login
+  @PublicRoute()
   @HttpCode(200)
   @Post('/login')
   @UseGuards(AuthGuard('local'))
@@ -53,7 +55,7 @@ export class AuthController {
 
   // Logout
   @Get('log-out')
-  @UseGuards(JwtAuthGuard)
+  //@UseGuards(JwtAuthGuard)
   async logOut(@Req() req, @Res() res) {
     const set = `Authentication=; HttpOnly; Path=/; Max-Age=0`;
     res.setHeader('Set-Cookie', set);

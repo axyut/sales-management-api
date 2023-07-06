@@ -4,6 +4,7 @@ import { AppModule } from './app.module';
 import { DocumentBuilder } from '@nestjs/swagger';
 import { SwaggerModule } from '@nestjs/swagger/dist';
 import * as cookieParser from 'cookie-parser';
+import { ValidationPipe } from '@nestjs/common';
 
 async function start() {
   const app = await NestFactory.create(AppModule);
@@ -14,6 +15,7 @@ async function start() {
   // parse cookie
   app.use(cookieParser());
 
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   // swagger -> api documentation
   const options = new DocumentBuilder()
     .setTitle('Sales Management API')

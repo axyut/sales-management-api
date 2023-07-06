@@ -10,7 +10,6 @@ import {
 import { ProductService } from './product.service';
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { CreateProductDto } from './dto/create-product.dto';
-import JwtAuthGuard from 'src/auth/guard/jwt.guard';
 import { UpdateProductDto } from './dto/update-product.dto';
 
 @Controller('product')

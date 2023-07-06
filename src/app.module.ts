@@ -23,6 +23,11 @@ import { ReportModule } from './report/report.module';
     ReportModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: 'APP_GUARD',
+      useValue: 'JwtAuthGuard',
+    },
+  ],
 })
 export class AppModule {}

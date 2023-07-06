@@ -16,7 +16,7 @@ import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiTags, ApiSecurity } from '@nestjs/swagger';
 import { Constants } from '../utils/constants';
-
+import { PublicRoute } from 'src/auth/decorators';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('user')
@@ -24,6 +24,7 @@ import { AuthGuard } from '@nestjs/passport';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @PublicRoute()
   @Post('/signup')
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
@@ -31,7 +32,7 @@ export class UserController {
 
   // Patch request to update user
   @ApiSecurity('JWT-auth')
-  @UseGuards(AuthGuard('jwt'))
+  //@UseGuards(AuthGuard('jwt'))
   @Post('/update')
   update(@Req() req, @Body() updateUserDto: UpdateUserDto) {
     const id = req.user.id;
@@ -41,7 +42,7 @@ export class UserController {
   // Delete request to delete user itself
   @ApiSecurity('JWT-auth')
   @Get('/delete')
-  @UseGuards(AuthGuard('jwt'))
+  //@UseGuards(AuthGuard('jwt'))
   remove(@Req() req) {
     const id = req.user.id;
     return this.userService.remove(+id);
