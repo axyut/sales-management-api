@@ -61,4 +61,12 @@ export class ProductController {
   ) {
     return this.productService.update(+id, +userId, updateProduct);
   }
+
+  // delete product by id and user id
+  @Post('/delete/:userId/:id')
+  @ApiSecurity('JWT-auth')
+  //@UseGuards(JwtAuthGuard)
+  remove(@Req() req, @Param('userId') userId: number, @Param('id') id: number) {
+    return this.productService.remove(+id, +userId);
+  }
 }

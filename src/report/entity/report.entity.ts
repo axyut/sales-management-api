@@ -13,15 +13,6 @@ export class Report {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  reportName: string;
-
-  @Column()
-  reportType: string;
-
-  @Column()
-  description: string;
-
   @CreateDateColumn()
   createdDate: Date;
 
