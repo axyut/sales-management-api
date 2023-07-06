@@ -9,7 +9,7 @@ async function start() {
   const app = await NestFactory.create(AppModule);
 
   // allow connection to frontend
-  // app.enableCors();
+  app.enableCors();
 
   // parse cookie
   app.use(cookieParser());
